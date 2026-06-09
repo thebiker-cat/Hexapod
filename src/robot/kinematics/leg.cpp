@@ -6,5 +6,12 @@ Leg::Leg(Adafruit_PWMServoDriver& board, int ch1, int ch2, int ch3)
 }
 
 void Leg::setAngles(float coxa, float femur, float tibia) {
+    _board.setPWM(_ch1, 0, angleToPulse(coxa));
+    _board.setPWM(_ch2, 0, angleToPulse(femur));
+    _board.setPWM(_ch3, 0, angleToPulse(tibia));
 
+}
+
+int Leg::angleToPulse(float angle) {
+    return map(angle, 0, 180, 150, 600);
 }
