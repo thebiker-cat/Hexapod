@@ -34,5 +34,5 @@ void Leg::setAngles(float coxa, float femur, float tibia) {
  * @return returns an int value
  */
 int Leg::angleToPulse(float angle) {
-    return map(angle, 0, 180, 205, 410); // 0° --> 205 ticks, 180° --> 410 ticks
+    return map(angle, 0, 180, 102, 512); // 0° --> 102 ticks, 180° --> 512 ticks
 }
