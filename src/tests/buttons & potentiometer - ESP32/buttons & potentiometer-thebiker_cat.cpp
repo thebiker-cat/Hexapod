@@ -60,7 +60,7 @@ void setup() {
     pinMode(ANGLE90_BUTTON, INPUT_PULLUP);
     pinMode(ANGLE180_BUTTON, INPUT_PULLUP);
     servo.setPeriodHertz(50); // Sets the PWM-frequency to 50 Hz so it sends 50 signals per second.
-    servo.attach(SERVO_PIN, 500, 2400); //  I am personally not sure if you need to restrict the PWM levels, because we are working with degrees here.
+    servo.attach(SERVO_PIN); //  I am personally not sure if you need to restrict the PWM levels, because we are working with degrees here.
 }
 
 void loop() {
