@@ -29,6 +29,8 @@ void setup() {
 
 void loop() {
     setPulse(); // To be able to set a new angle on the servo motor, the pulse has to be calculated every time.
-    board.setPWM(channel, 0, pulse); // With this command you can set a PWM on one of the 16 channels on the driver board.
+    board.setPWM(channel, 0, pulse);// With this command you can set a PWM on one of the 16 channels on the driver board.
+    board.setPWM(1, 0, pulse);
+    board.setPWM(2, 0, pulse);
 }
 
