@@ -22,7 +22,7 @@ float angle1, angle2, angle3; // These are the three different angle variables t
  * @return the method returns the value of angle1.
  */
 float calculateAngle1(float yp, float xp) {
-    return atan2(yp, xp);
+    return atan2(yp, xp) * 180 / PI;
 }
 
 /**
@@ -37,7 +37,7 @@ float calculateAngle1(float yp, float xp) {
  * @return the method returns the value of angle2.
  */
 float calculateAngle2(float dp, float zp, float ap, float bp, float cp) {
-    return atan2(d, z) + acos(((a * a) + (c * c) - (b * b)) / (2 * a * b));
+    return atan2(dp, zp) + acos(((ap * ap) + (cp * cp) - (bp * bp)) / (2 * ap * cp)) * 180 / PI;
 }
 
 /**
@@ -50,7 +50,7 @@ float calculateAngle2(float dp, float zp, float ap, float bp, float cp) {
  * @return the method returns the value of angle3.
  */
 float calculateAngle3(float ap, float bp, float cp) {
-    return 180 - acos(((a * a) + (b * b) - (c * c)) / (2 * a * b));
+    return acos(((ap * ap) + (bp * bp) - (cp * cp)) / (2 * ap * bp)) * 180 / PI;
 }
 
 /**
@@ -79,10 +79,22 @@ void setup() {
 void loop() {
     // checks if the buffer is available
     if (Serial.available()) {
+        String input = Serial.readStringUntil('\n');
+        input.trim();
+
+        int firstSpace = input.indexOf(' ');
+        String rest = input.substring(firstSpace + 1);
+        int secondSpace = input.indexOf(' ', firstSpace + 1);
+
+        if (firstSpace == -1 || secondSpace == -1) {
+            Serial.println("Fehler! Bitte X Y Z eingeben!");
+        }
+
         // imports float values and saves them in x, y and z
-        float x = Serial.parseFloat();
-        float y = Serial.parseFloat();
-        float z = Serial.parseFloat();
+        float x = input.substring(0, firstSpace).toFloat();
+        float y = rest.substring(0, secondSpace).toFloat();
+        float z = rest.substring(secondSpace + 1).toFloat();
+
 
         float r, d, c; // These are auxiliary variables that are used to calculate the different angles (coxa, femur, tibia)
 
@@ -92,14 +104,15 @@ void loop() {
         auto coordinates = calculateMissingVariables(y, x, z); // getting entered coordinates from the user with an array
 
         // saving coordinates in different variables
-        float r = coordinates[0];
-        float d = coordinates[1];
-        float c = coordinates[2];
+        r = coordinates[0];
+        d = coordinates[1];
+        c = coordinates[2];
 
-        // The three different calculations für each angle with the conversion from degrees to radians (* 180 / PI).
-        angle1 = calculateAngle1(y, x) * 180 / PI;
-        angle2 = calculateAngle2(d, -z, a, b, c) * 180 / PI;
-        angle3 = calculateAngle3(a, b, c) * 180 / PI;
+
+        // The three different calculations für each angle.
+        angle1 = calculateAngle1(y, x);
+        angle2 = calculateAngle2(d, -z, a, b, c);
+        angle3 = calculateAngle3(a, b, c);
 
         // Define standard output on the serial monitor
         Serial.print("Angle1 (Coxa): ");
