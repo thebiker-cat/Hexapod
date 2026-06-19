@@ -4,6 +4,7 @@
 /**
  * This is the constructor of a leg object, which sets a PCA9685 servo driver and 3 channels for the 3 motors of one leg, which
  * are on this board as the class attributes.
+ *
  * @param board , this is the PCA9685 servo driver, which has 16 PWM channels on it
  * @param ch1 , this is the channel for the coxa - servo
  * @param ch2 , this is the channel for the femur - servo
@@ -14,8 +15,27 @@ Leg::Leg(Adafruit_PWMServoDriver& board, int ch1, int ch2, int ch3)
 }
 
 /**
+ * This is a method to set the different coordinates of a leg.
+ *
+ * @param yp is the parameter that takes over the coordinate y.
+ * @param xp is the parameter that takes over the coordinate x.
+ * @param zp is the parameter that takes over the vertical length from femur to the tip of the leg.
+ */
+void Leg::setCoordinates(float x, float y, float z) {
+
+    auto angles = convertCoordinatesToAngles(x, y, z);
+
+    float angle1 = angles[0];
+    float angle2 = angles[1];
+    float angle3 = angles[2];
+
+    setAngles(angle1, angle2, angle3);
+}
+
+/**
  * This is a methode to set the different angles of the 3 servo motors on each leg.
  * The angles are being transformed in pulses (angleToPulse), because the servo works with PWM pulses.
+ *
  * @param coxa , this is the param to control the coxa angle of the servo, which is the angle between the body and the first segment of the leg.
  * @param femur , this is the param to control the femur angle of the servo, which ist the angle between the first and second segment of the leg.
  * @param tibia , this is the param to control the tibia angle of the servo, which ist the angle between the second and third segment of the leg.
@@ -30,7 +50,8 @@ void Leg::setAngles(float coxa, float femur, float tibia) {
 
 /**
  * This is a method to change an angle in degrees into a PWM-pulse format.
- * @param angle , this is the param, which gives degrees as a float.
+ *
+ * @param angle, this is the param, which gives degrees as a float.
  * @return returns an int value
  */
 int Leg::angleToPulse(float angle) {
